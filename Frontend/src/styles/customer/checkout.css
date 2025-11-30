@@ -1,6 +1,9 @@
+body{
+  background-color: #F4F7FE;
+}
+
 .checkout-page {
   min-height: 100vh;
-  background-color: #f4f6f9;
 }
 
 .checkout-loading {
@@ -27,6 +30,7 @@
   font-size: 24px;
   font-weight: 600;
   margin-bottom: 4px;
+  color: #1a1a1a
 }
 
 .checkout-card {
@@ -36,10 +40,11 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
 }
 
-.section-title {
+.delivery-section-title, .discount-section-title {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 16px;
+  color: #222;
 }
 
 .address-grid {

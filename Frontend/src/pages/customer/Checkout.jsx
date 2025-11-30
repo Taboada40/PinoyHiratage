@@ -115,7 +115,7 @@ export default function Checkout() {
 
           {/* Delivery Address */}
           <section className="checkout-card">
-            <h2 className="section-title">Delivery Address</h2>
+            <h2 className="delivery-section-title">Delivery Address</h2>
             <div className="address-grid">
               <div className="field-group">
                 <label>Street</label>
@@ -166,7 +166,7 @@ export default function Checkout() {
 
           {/* Discounts */}
           <section className="checkout-card">
-            <h2 className="section-title">Discounts</h2>
+            <h2 className="discount-section-title">Discounts</h2>
             <div className="discount-wrapper">
               <label>Enter discount code</label>
               <input
