@@ -190,21 +190,16 @@ export default function Checkout() {
       <div className="checkout-wrapper">
         <div className="checkout-container">
           <div className="checkout-main">
-            {/* Progress Indicator */}
+            {/* Progress Indicator - 2 Steps */}
             <div className="progress-steps">
               <div className="step active">
                 <div className="step-number">1</div>
-                <div className="step-label">Delivery Info</div>
+                <div className="step-label">Delivery Information</div>
               </div>
               <div className="step-divider"></div>
               <div className="step">
                 <div className="step-number">2</div>
                 <div className="step-label">Payment</div>
-              </div>
-              <div className="step-divider"></div>
-              <div className="step">
-                <div className="step-number">3</div>
-                <div className="step-label">Confirmation</div>
               </div>
             </div>
 

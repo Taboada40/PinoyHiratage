@@ -1,5 +1,5 @@
 /* =======================================================================
-   PAYMENT PAGE STYLES - ENHANCED WITH PROGRESS STEPS
+   PAYMENT PAGE STYLES - 2-STEP ENHANCED DESIGN
    Color Scheme: White and #0038a8
    ======================================================================= */
 
@@ -102,29 +102,32 @@ body {
   gap: 24px;
 }
 
-/* Progress Steps */
+/* Progress Steps - 2 Step Design */
 .progress-steps {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
+  justify-content: center;
+  margin-bottom: 32px;
   background: var(--white);
-  padding: 20px 28px;
+  padding: 24px 32px;
   border-radius: 16px;
   box-shadow: var(--shadow-md);
   animation: fadeInUp 0.5s ease;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .step {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   flex: 1;
 }
 
 .step-number {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: var(--gray-200);
   color: var(--gray-500);
@@ -132,8 +135,9 @@ body {
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 18px;
   transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
 .step.completed .step-number {
@@ -146,10 +150,11 @@ body {
   background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-light));
   color: var(--white);
   box-shadow: 0 4px 12px rgba(0, 56, 168, 0.3);
+  animation: pulse 2s ease-in-out infinite;
 }
 
 .step-label {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--gray-500);
   transition: color 0.3s ease;
@@ -164,10 +169,16 @@ body {
 }
 
 .step-divider {
-  flex: 1;
-  height: 2px;
+  flex: 0 0 80px;
+  height: 3px;
   background: var(--gray-200);
-  margin: 0 16px;
+  margin: 0 20px;
+  border-radius: 10px;
+  position: relative;
+}
+
+.step-divider.completed-divider {
+  background: var(--green);
 }
 
 @keyframes fadeInUp {
@@ -178,6 +189,15 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
   }
 }
 
@@ -784,19 +804,13 @@ select.form-input {
   }
 
   .progress-steps {
-    padding: 16px 20px;
-  }
-
-  .step-label {
-    display: none;
-  }
-
-  .step {
-    justify-content: center;
+    padding: 20px 24px;
+    max-width: 100%;
   }
 
   .step-divider {
-    margin: 0 8px;
+    flex: 0 0 40px;
+    margin: 0 12px;
   }
 
   .payment-methods-grid {
@@ -845,6 +859,25 @@ select.form-input {
   .apply-btn,
   .remove-promo-btn {
     width: 100%;
+  }
+
+  .progress-steps {
+    padding: 16px 20px;
+  }
+
+  .step-number {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .step-label {
+    font-size: 13px;
+  }
+
+  .step-divider {
+    flex: 0 0 30px;
+    margin: 0 8px;
   }
 }
 

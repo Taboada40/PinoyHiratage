@@ -13,6 +13,7 @@ import ProductDetails from "./pages/products/ProductDetails.jsx";
 import Profile from "./pages/customer/Profile.jsx";
 import Review from "./pages/customer/Review.jsx";
 import Payment from "./pages/customer/Payment.jsx"; // SECONG
+
 import CartPage from "./pages/customer/CartPage.jsx";  
 import Checkout from "./pages/customer/Checkout.jsx";
 import Orders from "./pages/customer/Orders.jsx";
