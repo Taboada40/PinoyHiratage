@@ -33,18 +33,37 @@ const UsersOverview = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await customersApi.get(""); 
+        setLoading(true);
         
-        // Only update if we get a valid array
-        if (response.data && Array.isArray(response.data)) {
-            setUsers(response.data);
+        // Fetch customers
+        const customersResponse = await customersApi.get("");
+        
+        if (customersResponse.data && Array.isArray(customersResponse.data)) {
+          // Filter out admin user
+          const filteredCustomers = customersResponse.data.filter(user => 
+            user.email !== "admin@pinoyheritage.com"
+          );
+          
+          setUsers(filteredCustomers);
+        } else {
+          setUsers([]);
         }
       } catch (err) {
         console.warn("Failed to fetch customers:", err);
+        if (err.response?.data && Array.isArray(err.response.data)) {
+          const filteredCustomers = err.response.data.filter(user => 
+            user.email !== "admin@pinoyheritage.com"
+          );
+          setUsers(filteredCustomers);
+        } else {
+          setUsers([]);
+        }
       } finally {
         setLoading(false);
       }
@@ -53,24 +72,43 @@ const UsersOverview = () => {
     fetchUsers();
   }, []);
 
+  // Filter users based on search term
   const filteredUsers = users.filter((user) => {
     const term = searchTerm.toLowerCase();
     
-    // Combine name logic (Backend usually sends firstName/lastName, Sample uses name)
     const fullName = user.name || `${user.firstName || ""} ${user.lastName || ""}`.trim();
     const finalName = (fullName || user.username || "").toLowerCase();
     
     const email = (user.email || "").toLowerCase();
-    const address = (user.address || "").toLowerCase();
     const phone = (user.phone || user.phoneNumber || "").toLowerCase();
 
     return (
       finalName.includes(term) ||
       email.includes(term) ||
-      address.includes(term) ||
       phone.includes(term)
     );
   });
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   if (loading) return <div style={{padding: '40px', textAlign: 'center'}}>Loading users...</div>;
 
@@ -95,7 +133,6 @@ const UsersOverview = () => {
       <div className="users-table-header">
         <div className="col-name">Name</div>
         <div className="col-email">Email</div>
-        <div className="col-address">Address</div>
         <div className="col-phone">Phone Number</div>
         <div className="col-actions">Actions</div>
       </div>
@@ -104,12 +141,11 @@ const UsersOverview = () => {
 
       {/* Table List */}
       <div className="users-list">
-        {filteredUsers.length > 0 ? (
-          filteredUsers.map((user, index) => (
+        {paginatedUsers.length > 0 ? (
+          paginatedUsers.map((user, index) => (
             <div key={user.id || index}>
               <div className="users-row">
                 <div className="col-name">
-                  {/* Handles both Sample Data (user.name) and Backend Data (firstName + lastName) */}
                   {user.name 
                     ? user.name 
                     : (user.firstName || user.lastName) 
@@ -118,14 +154,13 @@ const UsersOverview = () => {
                   }
                 </div>
                 <div className="col-email">{user.email || "N/A"}</div>
-                <div className="col-address">{user.address || "None"}</div>
                 <div className="col-phone">{user.phone || user.phoneNumber || "N/A"}</div>
                 <div className="col-actions view-action">
                   <EyeIcon />
                   <span>View only</span>
                 </div>
               </div>
-              {index !== filteredUsers.length - 1 && <div className="users-divider light"></div>}
+              {index !== paginatedUsers.length - 1 && <div className="users-divider light"></div>}
             </div>
           ))
         ) : (
@@ -135,12 +170,26 @@ const UsersOverview = () => {
         )}
       </div>
 
-      {/* Pagination */}
-      <div className="users-pagination">
-        <button className="nav-btn"><ArrowLeft /></button>
-        <span className="page-info">Page 1 of 1</span>
-        <button className="nav-btn"><ArrowRight /></button>
-      </div>
+      {/* Pagination - Only show if there are 10 or more customers */}
+      {filteredUsers.length >= 10 && (
+        <div className="users-pagination">
+          <button 
+            className="nav-btn" 
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+          >
+            <ArrowLeft />
+          </button>
+          <span className="page-info">Page {currentPage} of {totalPages}</span>
+          <button 
+            className="nav-btn" 
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+          >
+            <ArrowRight />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

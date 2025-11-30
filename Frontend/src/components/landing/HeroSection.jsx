@@ -26,10 +26,10 @@ function HeroSection() {
 
           {/* Hero Buttons */}
           <div className="hero-buttons">
-            <Link to="/catalog" className="button btn-primary">
+            <Link to="/catalog" className="button btn-primary-landing">
               <span>Shop Now →</span>
             </Link>
-            <button className="button btn-secondary" onClick={handleScrollToCategories}>
+            <button className="button btn-secondary-landing" onClick={handleScrollToCategories}>
               <span>Explore Collections</span>
             </button>
           </div>

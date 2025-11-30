@@ -186,7 +186,7 @@ const ProductsSection = () => {
                   <img 
                     src={product.imageUrl} 
                     alt={product.name} 
-                    className="product-image"
+                    className="manage-product-image"
                     onError={(e) => { e.target.src = 'https://via.placeholder.com/200?text=No+Image'; }}
                   />
                 ) : (
