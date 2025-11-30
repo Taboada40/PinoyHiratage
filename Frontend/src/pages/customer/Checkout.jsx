@@ -13,12 +13,30 @@ export default function Checkout() {
     street: "",
     city: "",
     province: "",
-    country: "",
+    country: "Philippines",
   });
 
   const [discountCode, setDiscountCode] = useState("");
+  const [validationErrors, setValidationErrors] = useState({});
+  const [showPhilNotice, setShowPhilNotice] = useState(false); // New state
 
   const userId = localStorage.getItem("userId");
+
+  const philippineProvinces = [
+    "Metro Manila",
+    "Cebu",
+    "Davao del Sur",
+    "Pangasinan",
+    "Laguna"
+  ];
+
+  const cities = {
+    "Metro Manila": ["Quezon City", "Manila", "Makati", "Pasig", "Taguig"],
+    "Cebu": ["Cebu City", "Mandaue", "Lapu-Lapu City"],
+    "Davao del Sur": ["Davao City", "Digos", "Panabo"],
+    "Pangasinan": ["Dagupan", "Lingayen", "Alaminos"],
+    "Laguna": ["Santa Rosa", "Calamba", "San Pablo"]
+  };
 
   const getUserFallbackCart = (id) => {
     if (!id) return [];
@@ -63,6 +81,7 @@ export default function Checkout() {
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
     setAddress((prev) => ({ ...prev, [name]: value }));
+    setValidationErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleRemoveItem = async (itemId) => {
@@ -84,15 +103,23 @@ export default function Checkout() {
     (sum, item) => sum + (item.unitPrice || item.price) * item.quantity,
     0
   );
-  const shippingFee = 0; // Free for now
+  const shippingFee = 0;
   const total = subtotal + shippingFee;
 
-  const handleCancelOrder = () => {
-    navigate("/cart");
+  const handleCancelOrder = () => navigate("/cart");
+
+  const validateFields = () => {
+    const errors = {};
+    if (!address.street.trim()) errors.street = "Street is required";
+    if (!address.province) errors.province = "Province is required";
+    if (!address.city) errors.city = "City is required";
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleProceedToPayment = () => {
     if (!cartItems.length) return;
+    if (!validateFields()) return;
     navigate("/payment");
   };
 
@@ -125,41 +152,65 @@ export default function Checkout() {
                   value={address.street}
                   onChange={handleAddressChange}
                   placeholder="Enter street"
+                  className={validationErrors.street ? "invalid" : ""}
                 />
+                {validationErrors.street && (
+                  <div className="input-error">{validationErrors.street}</div>
+                )}
                 <div className="field-example">e.g. 123 Mabini St.</div>
               </div>
-              <div className="field-group">
-                <label>City</label>
-                <input
-                  type="text"
-                  name="city"
-                  value={address.city}
-                  onChange={handleAddressChange}
-                  placeholder="Enter city"
-                />
-                <div className="field-example">e.g. Cebu City</div>
-              </div>
+
               <div className="field-group">
                 <label>Province</label>
-                <input
-                  type="text"
+                <select
                   name="province"
                   value={address.province}
                   onChange={handleAddressChange}
-                  placeholder="Enter province"
-                />
-                <div className="field-example">e.g. Cebu</div>
+                  className={validationErrors.province ? "invalid" : ""}
+                >
+                  <option value="">Select province</option>
+                  {philippineProvinces.map((prov) => (
+                    <option key={prov} value={prov}>
+                      {prov}
+                    </option>
+                  ))}
+                </select>
+                {validationErrors.province && (
+                  <div className="input-error">{validationErrors.province}</div>
+                )}
               </div>
+
+              <div className="field-group">
+                <label>City</label>
+                <select
+                  name="city"
+                  value={address.city}
+                  onChange={handleAddressChange}
+                  disabled={!address.province}
+                  className={validationErrors.city ? "invalid" : ""}
+                >
+                  <option value="">Select city</option>
+                  {cities[address.province]?.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+                {validationErrors.city && (
+                  <div className="input-error">{validationErrors.city}</div>
+                )}
+              </div>
+
               <div className="field-group">
                 <label>Country</label>
                 <input
                   type="text"
                   name="country"
                   value={address.country}
-                  onChange={handleAddressChange}
-                  placeholder="Enter country"
+                  readOnly
+                  onFocus={() => setShowPhilNotice(true)}
+                  onBlur={() => setShowPhilNotice(false)}
                 />
-                <div className="field-example">e.g. Philippines</div>
               </div>
             </div>
           </section>
@@ -177,6 +228,13 @@ export default function Checkout() {
               />
             </div>
           </section>
+
+          {/* Only in the Philippines notice */}
+          {showPhilNotice && (
+            <div className="checkout-error" style={{ textAlign: "center" }}>
+              Only in the Philippines
+            </div>
+          )}
         </div>
 
         {/* Summary */}
@@ -200,9 +258,7 @@ export default function Checkout() {
                   )}
                   <div className="summary-text">
                     <div className="summary-name">{item.productName}</div>
-                    <div className="summary-meta">
-                      Qty: {item.quantity}
-                    </div>
+                    <div className="summary-meta">Qty: {item.quantity}</div>
                   </div>
                 </div>
                 <div className="summary-item-right">
