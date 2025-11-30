@@ -174,25 +174,25 @@ html {
   z-index: 1;
 }
 
-.landing-page .btn-primary {
+.landing-page .btn-primary-landing {
   background: linear-gradient(135deg, #FCD116, #FFE066);
   color: #0038A8;
   box-shadow: 0 8px 24px rgba(252, 209, 22, 0.3);
 }
 
-.landing-page .btn-primary:hover {
+.landing-page .btn-primary-landing:hover {
   transform: translateY(-3px);
   box-shadow: 0 12px 32px rgba(252, 209, 22, 0.4);
 }
 
-.landing-page .btn-secondary {
+.landing-page .btn-secondary-landing {
   background: rgba(255, 255, 255, 0.1);
   color: white;
   border: 2px solid rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10px);
 }
 
-.landing-page .btn-secondary:hover {
+.landing-page .btn-secondary-landing:hover {
   background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.5);
 }

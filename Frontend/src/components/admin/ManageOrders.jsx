@@ -132,7 +132,7 @@ const OrdersSection = () => {
       <div className="orders-list">
         {filteredOrders.length > 0 ? (
           filteredOrders.map((order) => (
-            <div key={order.id}> {/* Use ID as key, not index */}
+            <div key={order.id}> 
               <div className="order-row">
                 <p className="fw-bold">#{order.id}</p>
                 <p>{order.createdAt || ""}</p>
@@ -159,9 +159,13 @@ const OrdersSection = () => {
               <div className="order-divider light"></div>
             </div>
           ))
-        ) : (
+        ) : search ? (
           <p style={{ textAlign: "center", width: "100%", padding: "2rem 0" }} className="no-results">
             No orders found matching "{search}"
+          </p>
+        ) : (
+          <p style={{ textAlign: "center", width: "100%", padding: "2rem 0", fontStyle: "italic" }} className="no-results">
+            No orders found
           </p>
         )}
       </div>

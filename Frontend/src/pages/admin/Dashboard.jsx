@@ -46,6 +46,11 @@ const Dashboard = () => {
           customersArray = [];
         }
 
+        // Filter out admin email from customer count
+        const filteredCustomers = customersArray.filter(customer => 
+          customer.email !== "admin@pinoyheritage.com"
+        );
+
         // Fetch orders count
         let ordersCount = 0;
         try {
@@ -58,9 +63,9 @@ const Dashboard = () => {
           console.warn('Failed to fetch orders:', orderError);
         }
 
-        // Update stats with real data
+        // Update stats with real data 
         setStats({
-          customers: customersArray.length,
+          customers: filteredCustomers.length,
           products: productsArray.length,
           orders: ordersCount
         });
