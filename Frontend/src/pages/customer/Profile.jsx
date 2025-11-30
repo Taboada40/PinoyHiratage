@@ -90,9 +90,7 @@ const Profile = () => {
 
   return (
     <div className="profile-page">
-      <Header showNav={false} />
-
-      <ProfileSidebar />
+      <Header showNav={true} />
 
       <main className="main-content">
         <div className="profile-container">

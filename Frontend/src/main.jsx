@@ -17,6 +17,7 @@ import CartPage from "./pages/customer/CartPage.jsx";
 import Checkout from "./pages/customer/Checkout.jsx";
 import Orders from "./pages/customer/Orders.jsx";
 import Notifications from "./pages/customer/Notifications.jsx";
+import Wishlist from "./pages/customer/Wishlist.jsx"; 
 
 import AdminDashboard from "./pages/admin/Dashboard.jsx";
 import AdminUsers from "./pages/admin/Users.jsx";
@@ -148,6 +149,16 @@ const RouteGuard = () => {
         }
       />
       <Route
+        path="/wishlist"
+        element={
+          <RequireCustomer>
+            <CustomerSessionGuard>
+              <Wishlist />
+            </CustomerSessionGuard>
+          </RequireCustomer>
+        }
+      />
+      <Route
         path="/review"
         element={
           <RequireCustomer>
@@ -177,7 +188,6 @@ const RouteGuard = () => {
           </RequireCustomer>
         }
       />   
-
       <Route
         path="/checkout"
         element={
