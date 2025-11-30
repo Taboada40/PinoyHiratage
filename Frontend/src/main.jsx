@@ -239,6 +239,17 @@ const RouteGuard = () => {
         }
       />
       <Route
+        path="/product/:productId/review"
+        element={
+          <RequireCustomer>
+            <CustomerSessionGuard>
+              <Review />
+            </CustomerSessionGuard>
+          </RequireCustomer>
+        }
+      />
+
+      <Route
         path="/admin/categories"
         element={
           <RequireAdmin>

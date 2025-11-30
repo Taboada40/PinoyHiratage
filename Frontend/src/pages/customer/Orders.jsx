@@ -67,8 +67,9 @@ const Orders = () => {
 
   const filteredOrders = filterOrders();
 
-  const handleLeaveReview = (orderId) => {
-    navigate("/review", { state: { orderId } });
+  // --- FIXED: pass productId to Review page ---
+  const handleLeaveReview = (productId) => {
+    navigate("/review", { state: { productId } });
   };
 
   return (
@@ -77,13 +78,11 @@ const Orders = () => {
 
       <div className="orders-wrapper">
         <div className="orders-container">
-          {/* Header */}
           <div className="orders-header">
             <h1 className="orders-title">My Orders</h1>
             <p className="orders-subtitle">Track and manage your orders</p>
           </div>
 
-          {/* Tabs */}
           <div className="orders-tabs">
             <button
               className={`tab ${activeTab === "all" ? "active" : ""}`}
@@ -117,7 +116,6 @@ const Orders = () => {
             </button>
           </div>
 
-          {/* Content */}
           {loading ? (
             <div className="orders-loading">
               <div className="spinner"></div>
@@ -144,12 +142,9 @@ const Orders = () => {
             <div className="orders-list">
               {filteredOrders.map((order) => (
                 <div key={order.orderId} className="order-card">
-                  {/* Order Header */}
                   <div className="order-header">
                     <div className="order-info">
-                      <span className="order-number">
-                        Order #{order.orderId}
-                      </span>
+                      <span className="order-number">Order #{order.orderId}</span>
                       <span className="order-date">
                         {new Date(order.orderDate || Date.now()).toLocaleDateString("en-US", {
                           year: "numeric",
@@ -164,7 +159,6 @@ const Orders = () => {
                     </div>
                   </div>
 
-                  {/* Order Products */}
                   <div className="order-products">
                     {order.products && order.products.map((product) => (
                       <div key={product.productId} className="order-product-item">
@@ -186,11 +180,23 @@ const Orders = () => {
                             ₱{((product.unitPrice || 0) * product.quantity).toFixed(2)}
                           </p>
                         </div>
+
+                        {/* Leave Review button per product */}
+                        <button
+                          className={`btn-review ${
+                            order.status === "Delivered" ? "" : "disabled"
+                          }`}
+                          onClick={() => handleLeaveReview(product.productId)}
+                          disabled={order.status !== "Delivered"}
+                        >
+                          {order.status === "Delivered"
+                            ? `⭐ Leave a Review`
+                            : "🔒 Review Locked"}
+                        </button>
                       </div>
                     ))}
                   </div>
 
-                  {/* Order Footer */}
                   <div className="order-footer">
                     <div className="order-total">
                       <span className="total-label">Total Amount:</span>
@@ -204,15 +210,6 @@ const Orders = () => {
                         onClick={() => navigate(`/order/${order.orderId}`)}
                       >
                         View Details
-                      </button>
-                      <button
-                        className={`btn-review ${
-                          order.status === "Delivered" ? "" : "disabled"
-                        }`}
-                        onClick={() => handleLeaveReview(order.orderId)}
-                        disabled={order.status !== "Delivered"}
-                      >
-                        {order.status === "Delivered" ? "⭐ Leave a Review" : "🔒 Review Locked"}
                       </button>
                     </div>
                   </div>
