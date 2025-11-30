@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 
-import LandingPage from "./pages/LandingPage.jsx"
+import LandingPage from "./pages/LandingPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import Login from "./pages/authentication/Login.jsx";
 import Signup from "./pages/authentication/Signup.jsx";
@@ -12,11 +12,12 @@ import ProductDetails from "./pages/products/ProductDetails.jsx";
 
 import Profile from "./pages/customer/Profile.jsx";
 import Review from "./pages/customer/Review.jsx";
-import Payment from "./pages/customer/Payment.jsx"; // SECONG
+import Payment from "./pages/customer/Payment.jsx";
 
 import CartPage from "./pages/customer/CartPage.jsx";  
 import Checkout from "./pages/customer/Checkout.jsx";
 import Orders from "./pages/customer/Orders.jsx";
+import OrderDetails from "./pages/customer/OrderDetails.jsx";
 import Notifications from "./pages/customer/Notifications.jsx";
 import Wishlist from "./pages/customer/Wishlist.jsx"; 
 
@@ -50,28 +51,22 @@ const RequireCustomer = ({ children }) => {
 };
 
 // Customer session + idle timeout guard (3 minutes)
-const CUSTOMER_IDLE_TIMEOUT = 3 * 60 * 1000; // 3 minutes in ms
+const CUSTOMER_IDLE_TIMEOUT = 3 * 60 * 1000; // 3 minutes
 
 const CustomerSessionGuard = ({ children }) => {
-  const navigate = useLocation().pathname; // placeholder to force re-render on route change
+  const navigate = useLocation().pathname;
 
   useEffect(() => {
     const role = localStorage.getItem("role");
     const userId = localStorage.getItem("userId");
 
-    // Only track idle for logged-in customers (not admins, not guests)
-    if (role === "ADMIN" || !userId) {
-      return;
-    }
+    if (role === "ADMIN" || !userId) return;
 
     let timeoutId;
 
     const resetTimer = () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
+      if (timeoutId) clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        // Auto-logout after inactivity
         localStorage.removeItem("userId");
         localStorage.removeItem("username");
         localStorage.removeItem("email");
@@ -83,13 +78,10 @@ const CustomerSessionGuard = ({ children }) => {
     const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];
     events.forEach((evt) => window.addEventListener(evt, resetTimer));
 
-    // Start initial timer
     resetTimer();
 
     return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
+      if (timeoutId) clearTimeout(timeoutId);
       events.forEach((evt) => window.removeEventListener(evt, resetTimer));
     };
   }, [navigate]);
@@ -104,7 +96,6 @@ const RouteGuard = () => {
     const path = location.pathname || "";
     const role = localStorage.getItem("role");
 
-    // If an admin navigates away from any /admin route, clear admin role
     if (role === "ADMIN" && !path.startsWith("/admin")) {
       localStorage.removeItem("role");
     }
@@ -118,7 +109,7 @@ const RouteGuard = () => {
       <Route path="/catalog" element={<ProductCatalog />} />
       <Route path="/product/:id" element={<ProductDetails />} />
 
-      {/* Customer Pages (Customer-only) */}
+      {/* Customer Pages */}
       <Route
         path="/profile"
         element={
@@ -135,6 +126,16 @@ const RouteGuard = () => {
           <RequireCustomer>
             <CustomerSessionGuard>
               <Orders />
+            </CustomerSessionGuard>
+          </RequireCustomer>
+        }
+      />
+      <Route
+        path="/order/:orderId"
+        element={
+          <RequireCustomer>
+            <CustomerSessionGuard>
+              <OrderDetails />
             </CustomerSessionGuard>
           </RequireCustomer>
         }
@@ -204,7 +205,7 @@ const RouteGuard = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
 
-      {/* Admin Pages (Protected) */}
+      {/* Admin Pages */}
       <Route
         path="/admin"
         element={

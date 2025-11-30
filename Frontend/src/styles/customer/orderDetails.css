@@ -1,0 +1,145 @@
+/* =======================================================================
+   ORDER DETAILS PAGE STYLES - MATCHES ORDERS PAGE
+   ======================================================================= */
+
+.order-details-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+  padding-bottom: 60px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  color: #111827;
+}
+
+.order-details-wrapper {
+  max-width: 1000px;
+  margin: 100px auto 0;
+  padding: 0 24px;
+}
+
+.order-details-wrapper h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.order-details-wrapper .status {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.status.pending { color: #d97706; }
+.status.processing { color: #2563eb; }
+.status.shipped { color: #6366f1; }
+.status.delivered { color: #059669; }
+.status.cancelled { color: #dc2626; }
+
+.total-amount {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.order-items {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.order-item-card {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 56, 168, 0.1);
+  transition: all 0.3s ease;
+}
+
+.order-item-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 56, 168, 0.15);
+}
+
+.product-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.product-image.placeholder {
+  background: linear-gradient(135deg, #0038a8, #0052e0);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.product-info h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.product-info p {
+  font-size: 14px;
+  color: #4b5563;
+  margin-bottom: 4px;
+}
+
+.btn-back {
+  margin-top: 40px;
+  padding: 12px 32px;
+  background: linear-gradient(135deg, #0038a8, #0052e0);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 56, 168, 0.4);
+}
+
+/* Loading Spinner */
+.order-details-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80px 20px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #e5e7eb;
+  border-top: 4px solid #0038a8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error state */
+.order-details-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 20px;
+  background: #fee2e2;
+  border-radius: 16px;
+  color: #dc2626;
+  text-align: center;
+}
